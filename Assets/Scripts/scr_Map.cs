@@ -21,6 +21,7 @@ public class scr_Map : MonoBehaviour
         public string BEMERKUNG;
         public float POSITION_X;
         public float POSITION_Y;
+        public LinkedList<string> TAGS;
     };
     public class ConnectionData {
         public string RELATIONID;
@@ -55,7 +56,7 @@ public class scr_Map : MonoBehaviour
 
     }
 
-    public void CreateRelation(Node a, Node b)
+    public void CreateRelation()
     {
 
     }
@@ -70,8 +71,7 @@ public class scr_Map : MonoBehaviour
         IDataReader readerC = dbcmd.ExecuteReader();
 
         NodeData nodeData = new NodeData();
-        string sqlName = "SELECT VALUE FROM NAME WHERE CHARACTER_ID = " + nodeData.CHARACTERID
-                        + " ORDER BY POSITION ASC";
+        string sqlName = "";
         IDbCommand dbcmdName = dbconn.CreateCommand();
         IDataReader readerN;
         string name;
@@ -93,22 +93,71 @@ public class scr_Map : MonoBehaviour
             nodeData.POSITION_Y = readerC.GetFloat(11);
             nodeData.AGE = readerC.GetInt32(12);
 
+            //name
+            sqlName = "SELECT VALUE FROM NAME WHERE CHARACTER_ID = " + nodeData.CHARACTERID
+                        + " ORDER BY POSITION ASC";
             dbcmdName.CommandText = sqlName;
             readerN = dbcmdName.ExecuteReader();
             while (readerN.Read())
             {
                 name += readerN.GetString(0) + " ";
             }
-
             nodeData.NAME = name;
 
-            //Hier müssen die NodePrefabs hin
+            //tags
+            sqlName = "SELECT VALUE FROM TAG WHERE CHARACTER_ID = " + nodeData.CHARACTERID;
+            dbcmdName.CommandText = sqlName;
+            readerN = dbcmdName.ExecuteReader();
+            nodeData.TAGS = new LinkedList<string>();
+            while (readerN.Read())
+            {
+                nodeData.TAGS.AddLast(readerN.GetString(0));
+            }
+            
             GameObject node = Instantiate(nodePrefab, new Vector2(0, 0), transform.rotation);
             node.GetComponent<Node>().GiveData(nodeData);
             nodeList.AddLast(node.GetComponent<Node>());
         }
 
         //load all the relations
+        ConnectionData connectionData = new ConnectionData();
+        sqlStr = "SELECT * FROM RELATION";
+        dbcmd.CommandText = sqlStr;
+        readerC = dbcmd.ExecuteReader();
+        string c1 = "";
+        string c2 = "";
+
+        while (readerC.Read())
+        {
+            c1 = readerC.GetString(1);
+            c2 = readerC.GetString(2);
+
+            LinkedList<Node>.Enumerator e = nodeList.GetEnumerator();
+            bool w1 = true;
+            bool w2 = true;
+
+            while (w1 || w2)
+            {
+                e.MoveNext();
+                if (e.Current.GetData().CHARACTERID.Equals(c1))
+                {
+                    w1 = false;
+                    connectionData.nodeA = e.Current;
+                }
+                else if (e.Current.GetData().CHARACTERID.Equals(c2))
+                {
+                    w2 = false;
+                    connectionData.nodeB = e.Current;
+                }
+            }
+            connectionData.RELATIONID = readerC.GetString(0);
+            connectionData.BEMERKUNG = readerC.GetString(3);
+            connectionData.BESCHRIFTUNG = readerC.GetString(4);
+
+            GameObject connection = Instantiate(connectionPrefab, new Vector2(0, 0), transform.rotation);
+            connection.GetComponent<Connection>().GiveData(connectionData);
+            connectionList.AddLast(connection.GetComponent<Connection>());
+        }
     }
 
     public void Save()

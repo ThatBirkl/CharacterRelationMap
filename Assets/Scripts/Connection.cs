@@ -7,9 +7,17 @@ using System;
 
 public class Connection : MonoBehaviour
 {
+    private scr_Map.ConnectionData data;
 
-    //Database values
-    string RELATIONID;
-    string BESCHRIFTUNG;
-    string BEMERKUNG;
+    public void GiveData(scr_Map.ConnectionData _data)
+    {
+        data = _data;
+        Connect();
+    }
+
+    private void Connect()
+    {
+        //Calculate, which corners are closest together
+        //Draws a line between those 2 corners
+    }
 }

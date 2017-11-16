@@ -22,4 +22,9 @@ public class Node : MonoBehaviour
     {
 
     }
+
+    public scr_Map.NodeData GetData()
+    {
+        return data;
+    }
 }
