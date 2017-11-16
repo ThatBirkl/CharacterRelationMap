@@ -39,6 +39,7 @@ public class scr_Map : MonoBehaviour
     IDbConnection dbconn;
     GameObject nodePrefab;
     GameObject connectionPrefab;
+    public bool saved = true;
 
     
     
@@ -51,14 +52,27 @@ public class scr_Map : MonoBehaviour
         connectionPrefab = Resources.Load<GameObject>("Prefabs/ConnectionPrefab");
     }
 
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S))
+        {
+            Save();
+        }
+
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F))
+        {
+            Save();
+        }
+    }
+
     void CreateNode()
     {
-
+        saved = false;
     }
 
     public void CreateRelation()
     {
-
+        saved = false;
     }
 
     public void Load()
@@ -116,6 +130,8 @@ public class scr_Map : MonoBehaviour
             
             GameObject node = Instantiate(nodePrefab, new Vector2(0, 0), transform.rotation);
             node.GetComponent<Node>().GiveData(nodeData);
+            node.GetComponent<Node>().id = nodeCount;
+            nodeCount++;
             nodeList.AddLast(node.GetComponent<Node>());
         }
 
@@ -156,11 +172,30 @@ public class scr_Map : MonoBehaviour
 
             GameObject connection = Instantiate(connectionPrefab, new Vector2(0, 0), transform.rotation);
             connection.GetComponent<Connection>().GiveData(connectionData);
+            connection.GetComponent<Connection>().id = connectionCount;
+            connectionCount++;
             connectionList.AddLast(connection.GetComponent<Connection>());
         }
     }
 
     public void Save()
+    {
+        saved = true;
+    }
+
+    public void End()
+    {
+        if (saved)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+
+    public void Find()
     {
 
     }

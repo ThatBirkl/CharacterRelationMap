@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/SearchResult_Map.unity
+- path: Assets/Scenes/Main_Map.unity
   isLoaded: 1
   isActive: 1

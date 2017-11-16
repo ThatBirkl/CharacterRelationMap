@@ -8,6 +8,7 @@ using System;
 public class Connection : MonoBehaviour
 {
     private scr_Map.ConnectionData data;
+    public int id;
 
     public void GiveData(scr_Map.ConnectionData _data)
     {
@@ -19,5 +20,10 @@ public class Connection : MonoBehaviour
     {
         //Calculate, which corners are closest together
         //Draws a line between those 2 corners
+    }
+
+    private void OnMouseOver()
+    {
+        
     }
 }

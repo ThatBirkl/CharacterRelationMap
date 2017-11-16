@@ -38,6 +38,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Connections
+    uniqueID: 327022825
+    locked: 0
+  - name: Nodes
+    uniqueID: 279232423
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: NameTags
+    uniqueID: 4086619593
+    locked: 0
+  - name: Popups
+    uniqueID: 1101702917
     locked: 0
