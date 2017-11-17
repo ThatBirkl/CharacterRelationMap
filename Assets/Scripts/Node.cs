@@ -8,10 +8,12 @@ public class Node : MonoBehaviour
     public int id;
     private scr_Map.NodeData data;
     private string displayName;
+    private Color originalColor;
 
     private void Start()
     {
         GetComponent<Renderer>().sortingLayerName = "Nodes";
+        originalColor = GetComponent<SpriteRenderer>().color;
     }
 
     /*
@@ -51,5 +53,21 @@ public class Node : MonoBehaviour
                 displayName += c;
             }
         }
+    }
+
+    private void OnMouseDrag()
+    {
+
+    }
+
+    private void OnMouseEnter()
+    {
+        GetComponent<SpriteRenderer>().color = new Color(originalColor.r + 0.30f, originalColor.g + 0.30f,
+                                                        originalColor.b + 0.40f, originalColor.a);
+    }
+
+    private void OnMouseExit()
+    {
+        GetComponent<SpriteRenderer>().color = originalColor;
     }
 }
