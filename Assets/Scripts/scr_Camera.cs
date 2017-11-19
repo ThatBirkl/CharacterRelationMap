@@ -6,7 +6,7 @@ public class scr_Camera : MonoBehaviour
 {
     private float zoomFactor = 5f;
     private float zoomMoveFactor;
-    private float movementSpeed = 60f;
+    private float movementSpeed = 120f;
     private float dragFactor_x;
     private float dragFactor_y;
     private Vector3 startPosition; //when scene is loaded
@@ -19,16 +19,16 @@ public class scr_Camera : MonoBehaviour
     {
         startPosition = transform.position;
 		moveTowards = startPosition;
-        moving = false;
-        dragFactor_x = Mathf.Pow(transform.position.z * (-0.1f), 9999999999999999) * 31.5f;
-        dragFactor_y = dragFactor_x * Screen.height / Screen.width;
+        moving = false; 
         zoomMoveFactor = 8f;
+        
     }
 
  
     void Update()
     {
-		Move();
+        movementSpeed *= transform.position.z * (-0.1f);
+        Move();
 		GetZoom();
     }
 	
@@ -37,6 +37,10 @@ public class scr_Camera : MonoBehaviour
         if (transform.position.z > -5)
         {
             moveTowards.z = -5;
+        }
+        if (transform.position.z < -100)
+        {
+            moveTowards.z = -100;
         }
         transform.position = Vector3.MoveTowards(transform.position, moveTowards, Time.deltaTime * movementSpeed);
     }
@@ -61,7 +65,7 @@ public class scr_Camera : MonoBehaviour
             moving = true;
             Vector2 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             //Vector2 mov = (Input.mousePosition - transform.position) * zoomMoveFactor;
-            mousePosition = new Vector2(mousePosition.x - 0.5f, mousePosition.y - 0.5f) * 2 * zoomMoveFactor;
+            mousePosition = new Vector2(mousePosition.x - 0.5f, mousePosition.y - 0.5f) * zoomMoveFactor;
             moveTowards = new Vector3(moveTowards.x - mousePosition.x, moveTowards.y - mousePosition.y, moveTowards.z - zoomFactor);
         }
 	}
@@ -69,16 +73,19 @@ public class scr_Camera : MonoBehaviour
 
 	private void Move()
 	{
+        dragFactor_x = transform.position.z * (31.5f / (-12030f)) * Screen.width;
+        dragFactor_y = dragFactor_x * Screen.height / Screen.width;
+
         if (Input.GetMouseButtonDown(2))
         {
             moving = true;
             oldPos = moveTowards;
-            dragOrigin = Camera.main.ScreenToViewportPoint(Input.mousePosition);//Get the ScreenVector the mouse clicked
+            dragOrigin = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         }
 
         if (Input.GetMouseButton(2))
         {
-            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition) - dragOrigin;    //Get the difference between where the mouse clicked and where it moved
+            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition) - dragOrigin;
             moveTowards = new Vector3(oldPos.x - (pos.x * dragFactor_x),
                                       oldPos.y - (pos.y * dragFactor_y),
                                       moveTowards.z);

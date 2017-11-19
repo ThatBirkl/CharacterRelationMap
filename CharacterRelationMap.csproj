@@ -232,6 +232,9 @@
     <Compile Include="Assets\Scripts\scr_Map.cs" />
     <Compile Include="Assets\Scripts\scr_SearchMap.cs" />
     <Compile Include="Assets\Scripts\scr_Text.cs" />
+    <Compile Include="Assets\Scripts\UI\scr_btn_NewNode.cs" />
+    <Compile Include="Assets\Scripts\UI\scr_Ribbon.cs" />
+    <Compile Include="Assets\Scripts\UTIL.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
