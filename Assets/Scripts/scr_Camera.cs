@@ -58,6 +58,12 @@ public class scr_Camera : MonoBehaviour
             Vector2 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             //Vector2 mov = (Input.mousePosition - transform.position) * zoomMoveFactor;
             mousePosition = new Vector2(mousePosition.x - 0.5f, mousePosition.y - 0.5f) * 2 * zoomMoveFactor;
+	    int x = mousePosition.x;
+	    x /= 5;
+	    x *= 5;
+	    int y = mousePosition.x;
+	    y /= 5;
+	    y *= 5;
             moveTowards = new Vector3(moveTowards.x + mousePosition.x, moveTowards.y + mousePosition.y, moveTowards.z + zoomFactor);
         }
         else if (Input.mouseScrollDelta.x < 0 || Input.mouseScrollDelta.y < 0)
@@ -66,7 +72,7 @@ public class scr_Camera : MonoBehaviour
             Vector2 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             //Vector2 mov = (Input.mousePosition - transform.position) * zoomMoveFactor;
             mousePosition = new Vector2(mousePosition.x - 0.5f, mousePosition.y - 0.5f) * zoomMoveFactor;
-            moveTowards = new Vector3(moveTowards.x - mousePosition.x, moveTowards.y - mousePosition.y, moveTowards.z - zoomFactor);
+            moveTowards = new Vector3(moveTowards.x /*- mousePosition.x*/, moveTowards.y/* - mousePosition.y*/, moveTowards.z - zoomFactor);
         }
 	}
 
