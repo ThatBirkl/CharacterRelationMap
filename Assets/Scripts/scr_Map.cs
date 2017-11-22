@@ -44,7 +44,7 @@ public class scr_Map : MonoBehaviour
     IDbConnection dbconn;
     GameObject nodePrefab;
     GameObject connectionPrefab;
-    public bool saved = true;
+    public static bool saved = true;
 
     
     
@@ -70,7 +70,7 @@ public class scr_Map : MonoBehaviour
         }
     }
 
-    void CreateNode()
+    public static void CreateNode()
     {
         saved = false;
     }
@@ -183,12 +183,17 @@ public class scr_Map : MonoBehaviour
         }
     }
 
-    public void Save()
+    /*
+     * In der SearchMap wird im Prinzip nur die SuchAnfrage gespeichert;
+     * Nur in der MainMap kann das Projekt gespeichert werden.
+     * Wenn in die SearchMap gewechselt wird, wird voerher gefragt, ob gespeichert werden soll.
+     */
+    public static void Save()
     {
         saved = true;
     }
 
-    public void End()
+    public static void End()
     {
         if (saved)
         {

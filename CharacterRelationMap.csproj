@@ -228,12 +228,18 @@
     <Compile Include="Assets\Scripts\Connection.cs" />
     <Compile Include="Assets\Scripts\Node.cs" />
     <Compile Include="Assets\Scripts\scr_Camera.cs" />
+    <Compile Include="Assets\Scripts\scr_Input.cs" />
     <Compile Include="Assets\Scripts\scr_MainMenu.cs" />
     <Compile Include="Assets\Scripts\scr_Map.cs" />
+    <Compile Include="Assets\Scripts\scr_MetaVariables.cs" />
     <Compile Include="Assets\Scripts\scr_SearchMap.cs" />
     <Compile Include="Assets\Scripts\scr_Text.cs" />
-    <Compile Include="Assets\Scripts\UI\scr_btn_NewNode.cs" />
+    <Compile Include="Assets\Scripts\UI\scr_Button.cs" />
+    <Compile Include="Assets\Scripts\UI\scr_Project.cs" />
+    <Compile Include="Assets\Scripts\UI\scr_ResetCamera.cs" />
     <Compile Include="Assets\Scripts\UI\scr_Ribbon.cs" />
+    <Compile Include="Assets\Scripts\UI\scr_Search.cs" />
+    <Compile Include="Assets\Scripts\UI\scr_Undo.cs" />
     <Compile Include="Assets\Scripts\UTIL.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,9 +7,7 @@ public class scr_Ribbon : MonoBehaviour
 
 	void Start ()
     {
-        //set size to fit the screen
-        float height = GetComponent<RectTransform>().sizeDelta.y * Screen.height / 441;
-        GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, height);
+        Resize();
     }
 	
 	
@@ -17,4 +15,11 @@ public class scr_Ribbon : MonoBehaviour
     {
 		
 	}
+
+    private void Resize()
+    {
+        //set size to fit the screen
+        float height = /*GetComponent<RectTransform>().sizeDelta.y*/ 50 * Screen.height / 354;
+        GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, height);
+    }
 }

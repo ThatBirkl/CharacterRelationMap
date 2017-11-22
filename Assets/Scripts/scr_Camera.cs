@@ -21,7 +21,6 @@ public class scr_Camera : MonoBehaviour
 		moveTowards = startPosition;
         moving = false; 
         zoomMoveFactor = 8f;
-        
     }
 
  
@@ -47,7 +46,7 @@ public class scr_Camera : MonoBehaviour
 
     public void ResetCamera()
     {
-        gameObject.transform.position = startPosition;
+        moveTowards = startPosition;
     }
 	
 	private void GetZoom()
@@ -79,7 +78,7 @@ public class scr_Camera : MonoBehaviour
 
 	private void Move()
 	{
-        dragFactor_x = transform.position.z * (31.5f / (-12030f)) * Screen.width;
+        dragFactor_x = transform.position.z * ((Screen.width/3760f) + (464f/235f)) * (-1); //-2.15f || -2.4
         dragFactor_y = dragFactor_x * Screen.height / Screen.width;
 
         if (Input.GetMouseButtonDown(2))
