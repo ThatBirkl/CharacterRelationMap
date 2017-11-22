@@ -8,7 +8,12 @@ using System;
 public class scr_Map : MonoBehaviour
 {
     //##### static variables for all other classes to access #####
-    static string databasePath = "URI=file:" + Application.dataPath + "/Database/CharacterRelation.db";
+#if UNITY_EDITOR
+	static string databasePath = "URI=file:" + Application.dataPath + "/Database/TestDB.db";
+#else
+	static string databasePath = "URI=file:" + Application.dataPath + "/Database/CharacterRelation.db";
+#endif
+    
 
     //##### classes and structs for all other classes to access #####
     public class NodeData {
