@@ -13,7 +13,6 @@ public class scr_Map : MonoBehaviour
 #else
 	static string databasePath = "URI=file:" + Application.dataPath + "/Database/CharacterRelation.db";
 #endif
-    
 
     //##### classes and structs for all other classes to access #####
     public class NodeData {

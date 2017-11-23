@@ -7,12 +7,12 @@ public class scr_Camera : MonoBehaviour
     private float zoomFactor = 5f;
     private float zoomMoveFactor;
     private float movementSpeed = 120f;
-    private float dragFactor_x;
-    private float dragFactor_y;
+    private float dragFactor;
     private Vector3 startPosition; //when scene is loaded
 	private Vector3 moveTowards;
-	private Vector3 dragOrigin;
-    private Vector3 oldPos;
+    private Vector3 offset;
+    private Vector3 dragOrigin;
+    private Vector3 cameraOrigin;
     private bool moving;
 
 	void Start ()
@@ -78,22 +78,26 @@ public class scr_Camera : MonoBehaviour
 
 	private void Move()
 	{
-        dragFactor_x = transform.position.z * ((Screen.width/3760f) + (464f/235f)) * (-1); //-2.15f || -2.4
-        dragFactor_y = dragFactor_x * Screen.height / Screen.width;
+        dragFactor= -1f;
 
         if (Input.GetMouseButtonDown(2))
         {
             moving = true;
-            oldPos = moveTowards;
-            dragOrigin = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, -transform.position.z);
+            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            offset = transform.position - mousePos;
+            dragOrigin = mousePos;
+            cameraOrigin = transform.position;
         }
 
         if (Input.GetMouseButton(2))
         {
-            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition) - dragOrigin;
-            moveTowards = new Vector3(oldPos.x - (pos.x * dragFactor_x),
-                                      oldPos.y - (pos.y * dragFactor_y),
-                                      moveTowards.z);
+            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, -transform.position.z);
+            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            Vector3 DeltaMousePos = mousePos - dragOrigin;
+            //dragOrigin = mousePos;
+            moveTowards = moveTowards + DeltaMousePos * dragFactor;
+
         }
 
         if (Input.GetMouseButtonUp(2))

@@ -10,6 +10,7 @@ public class scr_Project : scr_Button
     {
         if (!active)
         {
+            active = true;
             Vector2 pos = new Vector2(-208.33f, -105.1f);
             Vector2 scale = new Vector2(243.34f, 110f);
 
@@ -28,7 +29,7 @@ public class scr_Project : scr_Button
         }
         else
         {
-            Destroy(menu);
+            Destroy(transform.GetChild(1));
         }
     }
 
