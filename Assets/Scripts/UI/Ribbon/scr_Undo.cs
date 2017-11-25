@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class scr_Search : scr_Button
+public class scr_Undo : scr_RibbonButton
 {
     public override void OnClick()
     {
@@ -11,7 +11,7 @@ public class scr_Search : scr_Button
 
     protected override void StartAdditionals()
     {
-        pos = new Vector2(297.5f, -15f);
+        pos = new Vector2(-187.54f, -15f);
         size = new Vector2(45, 20);
     }
 }

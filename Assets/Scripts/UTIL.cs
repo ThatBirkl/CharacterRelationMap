@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class UTIL : MonoBehaviour
 {
@@ -23,5 +24,16 @@ public class UTIL : MonoBehaviour
     {
         var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
         return System.Convert.ToBase64String(plainTextBytes);
+    }
+
+    public static LinkedList<string> ParseCommaString(string s)
+    {
+        List<string> list = new List<string>();
+
+        list = s.Split(',').ToList<string>();
+
+        LinkedList<string> ret = new LinkedList<string>(list);
+
+        return ret;
     }
 }
