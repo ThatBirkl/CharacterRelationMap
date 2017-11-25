@@ -11,31 +11,19 @@ public class scr_Project : scr_Button
         if (!active)
         {
             active = true;
-            Vector2 pos = new Vector2(-208.33f, -105.1f);
-            Vector2 scale = new Vector2(243.34f, 110f);
-
-            float x = pos.x * Screen.width / 660;
-            float y = pos.y * Screen.height / 354;
-            pos = new Vector3(x, y + 25, 0);
-
-            x = size.x * Screen.width / 660;
-            y = size.y * Screen.height / 354;
-            size = new Vector2(x, y);
-
-            menu = Resources.Load<GameObject>("Prefabs/Project_Menu");
+            menu = Resources.Load<GameObject>("Prefabs/window_ProjectMenu");
             GameObject.Instantiate(menu, transform);
-            menu.GetComponent<RectTransform>().localPosition = pos;
-            menu.GetComponent<RectTransform>().sizeDelta = size;
         }
         else
         {
-            Destroy(transform.GetChild(1));
+            active = false;
+            Destroy(transform.GetChild(1).gameObject);
         }
     }
 
     protected override void StartAdditionals()
     {
-        pos = new Vector2(-285, -25);
-        size = new Vector2(65, 40);
+        pos = new Vector2(-297.54f, -15f);
+        size = new Vector2(45, 20);
     }
 }

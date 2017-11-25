@@ -11,7 +11,7 @@ public class scr_Search : scr_Button
 
     protected override void StartAdditionals()
     {
-        pos = new Vector2(285, -25);
-        size = new Vector2(65, 40);
+        pos = new Vector2(297.5f, -15f);
+        size = new Vector2(45, 20);
     }
 }

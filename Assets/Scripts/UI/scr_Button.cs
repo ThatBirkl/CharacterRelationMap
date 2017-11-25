@@ -28,13 +28,14 @@ public class scr_Button : MonoBehaviour
 
         float x = pos.x * Screen.width / 660;
         float y = pos.y * Screen.height / 354;
-        pos = new Vector3(x, y + 25, 0);
+        float positionFactor_y = 15 * 354 / Screen.height;
+        pos = new Vector3(x, y + positionFactor_y, 0);
 
         x = size.x * Screen.width / 660;
         y = size.y * Screen.height / 354;
         size = new Vector2(x, y);
 
-        transform.GetChild(0).GetComponent<Text>().fontSize = 14 * Screen.width / 660;
+        transform.GetChild(0).gameObject.GetComponent<Text>().fontSize = 10 * Screen.width / 660;
 
         GetComponent<RectTransform>().localPosition = pos;
         GetComponent<RectTransform>().sizeDelta = size;

@@ -18,7 +18,6 @@ public class scr_Map : MonoBehaviour
     public class NodeData {
         public string CHARACTERID;
         public string NAME;
-        public int AGE;
         public string BIRTHDATE;
         public string DEATHDATE;
         public string RACE;
@@ -109,7 +108,6 @@ public class scr_Map : MonoBehaviour
             nodeData.BEMERKUNG = readerC.GetString(9);
             nodeData.POSITION_X = readerC.GetFloat(10);
             nodeData.POSITION_Y = readerC.GetFloat(11);
-            nodeData.AGE = readerC.GetInt32(12);
 
             //name
             sqlName = "SELECT VALUE FROM NAME WHERE CHARACTER_ID = " + nodeData.CHARACTERID
