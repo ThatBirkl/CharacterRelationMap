@@ -9,7 +9,7 @@ public class scr_Map : MonoBehaviour
 {
     //##### static variables for all other classes to access #####
 #if UNITY_EDITOR
-	static string databasePath = "URI=file:" + Application.dataPath + "/Database/TestDB.db";
+	static string databasePath = "../Database/TestDB.db";
 #else
 	static string databasePath = "URI=file:" + Application.dataPath + "/Database/CharacterRelation.db";
 #endif
@@ -43,6 +43,7 @@ public class scr_Map : MonoBehaviour
     GameObject nodePrefab;
     GameObject connectionPrefab;
     public static bool saved = true;
+    private static string sql;
 
     
     
@@ -68,9 +69,22 @@ public class scr_Map : MonoBehaviour
         }
     }
 
-    public static void CreateNode()
+    public static void ShowContextMenu(Vector3 mousePos)
+    {
+
+    }
+
+    public static void CreateNode(Vector3 mousePos)
     {
         saved = false;
+
+        MetaVariables.mousePosition = mousePos;
+
+        //menu = Resources.Load<GameObject>("Prefabs/window_ProjectMenu");
+        //GameObject.Instantiate(menu, transform);
+        GameObject nodeMenu = Resources.Load<GameObject>("Prefabs/window_NewNode");
+        GameObject.Instantiate(nodeMenu, mousePos, Quaternion.Euler(0,0,0));
+        print("hier");
     }
 
     public void CreateRelation()
@@ -205,5 +219,17 @@ public class scr_Map : MonoBehaviour
     public void Find()
     {
 
+    }
+
+    public static void WriteSearchConfig()
+    {
+        System.IO.StreamWriter writer = new System.IO.StreamWriter("../temp/config.cfg");
+        using (writer)
+        {
+            writer.WriteLine("#MAPTYPE search");
+            writer.WriteLine("");
+            writer.WriteLine("#SQL " + sql);
+
+        }
     }
 }

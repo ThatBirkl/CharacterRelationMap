@@ -32,10 +32,20 @@ public class scr_Input : MonoBehaviour
             (Input.GetKey(KeyCode.RightControl) && Input.GetKeyDown(KeyCode.N)) || //RightControl then N
             (Input.GetKey(KeyCode.N) && Input.GetKeyDown(KeyCode.RightControl)))   //N then RightControl
         {
+            print("get the input");
             if (MetaVariables.mapType == MetaVariables.MapType.Main)
             {
-                scr_Map.CreateNode();
+                Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z);
+                mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+                scr_Map.CreateNode(mousePos);
             }
+        }
+        //Context Menu
+        else if (Input.GetMouseButtonDown(1))
+        {
+            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z);
+            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            scr_Map.ShowContextMenu(mousePos);
         }
 
 

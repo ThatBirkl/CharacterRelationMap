@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class scr_Project : scr_Button
+public class scr_Project : scr_RibbonButton
 {
     GameObject menu;
     bool active;
