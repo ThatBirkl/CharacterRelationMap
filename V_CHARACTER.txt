@@ -1,0 +1,19 @@
+create view V_CHARACTER (CHARACTER_ID, NAME, RACE, AGE, BIRTHDATE, DEATHDATE, BEMERKUNG, TAGS, PROJECT_ID, POSITION_X, POSITION_Y)
+as
+select character.characterid
+	, (select group_concat(name.VALUE, " ")
+	   from name
+	   where name.CHARACTER_ID = character.characterid
+	   order by name.POSITION asc)
+	, character.RACE
+	, character.AGE
+	, character.BIRTHDATE
+	, character.DEATHDATE
+	, character.BEMERKUNG
+	, (select group_concat(tag.VALUE, ", ")
+		from tag
+		where tag.CHARACTER_ID = CHARACTER.CHARACTERID)
+	, character.PROJECT_ID
+	, character.POSITION_X
+	, character.POSITION_Y
+from character
