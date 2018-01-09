@@ -30,6 +30,7 @@ public class Node : MonoBehaviour
         state = State.inactive;
         moveTowards = transform.position;
         distance = 10;
+        UTIL.NewID(out id);
     }
 
     private void Update()

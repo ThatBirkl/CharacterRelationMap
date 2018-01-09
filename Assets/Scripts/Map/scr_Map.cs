@@ -20,6 +20,7 @@ public class scr_Map : MonoBehaviour
         public string NAME;
         public string BIRTHDATE;
         public string DEATHDATE;
+        public int AGE;
         public string RACE;
         public string BEMERKUNG;
         public float POSITION_X;
@@ -35,13 +36,17 @@ public class scr_Map : MonoBehaviour
     };
 
     //##### normal variables #####
-    public LinkedList<Node> nodeList = new LinkedList<Node>();
-    public LinkedList<Connection> connectionList = new LinkedList<Connection>();
-    private int nodeCount;
-    private int connectionCount;
-    IDbConnection dbconn;
-    GameObject nodePrefab;
-    GameObject connectionPrefab;
+    public static LinkedList<Node> nodeList = new LinkedList<Node>();
+    public static LinkedList<Node> deletedNodeList = new LinkedList<Node>();
+    public static LinkedList<Connection> connectionList = new LinkedList<Connection>();
+    public static LinkedList<Connection> deletedConnectionList = new LinkedList<Connection>();
+    private static string projectID;
+    private static int nodeCount;
+    private static int connectionCount;
+    static IDbConnection dbconn;
+    static GameObject nodePrefab;
+    static GameObject connectionPrefab;
+    static GameObject contextMenu;
     public static bool saved = true;
     private static string sql;
 
@@ -54,6 +59,7 @@ public class scr_Map : MonoBehaviour
         dbconn = (IDbConnection)new SqliteConnection(databasePath); //set connection to database
         nodePrefab = Resources.Load<GameObject>("Prefabs/NodePrefab");
         connectionPrefab = Resources.Load<GameObject>("Prefabs/ConnectionPrefab");
+        contextMenu = Resources.Load<GameObject>("Prefabs/window_ContextMenu");
     }
 
     private void Update()
@@ -71,6 +77,18 @@ public class scr_Map : MonoBehaviour
 
     public static void ShowContextMenu(Vector3 mousePos)
     {
+        GameObject canvas = GameObject.Find("Canvas");
+
+        //mousePos = Camera.main.WorldToScreenPoint(mousePos);
+
+        GameObject _contextMenu = GameObject.Instantiate(
+                contextMenu,
+                mousePos,
+                Quaternion.Euler(0, 0, 0));
+        mousePos = Camera.main.WorldToScreenPoint(mousePos);
+        _contextMenu.transform.position = mousePos;
+
+        _contextMenu.transform.SetParent(canvas.transform);
 
     }
 
@@ -92,7 +110,7 @@ public class scr_Map : MonoBehaviour
         saved = false;
     }
 
-    public void Load()
+    public static void Load()
     {
         //load all the nodes
         dbconn.Open();
@@ -111,17 +129,18 @@ public class scr_Map : MonoBehaviour
         while (readerC.Read())
         {
             name = "";
-            nodeData.CHARACTERID = readerC.GetString(0);
-            nodeData.BIRTHDATE = readerC.GetString(2) + "."
-                                + readerC.GetString(3) + "."
-                                + readerC.GetString(4);
-            nodeData.DEATHDATE = readerC.GetString(5) + "."
-                                + readerC.GetString(6) + "."
-                                + readerC.GetString(7);
-            nodeData.RACE = readerC.GetString(8);
-            nodeData.BEMERKUNG = readerC.GetString(9);
-            nodeData.POSITION_X = readerC.GetFloat(10);
-            nodeData.POSITION_Y = readerC.GetFloat(11);
+            //REWORK THIS SHIT!!!!
+            //nodeData.CHARACTERID = readerC.GetString(0);
+            //nodeData.BIRTHDATE = readerC.GetString(2) + "."
+            //                    + readerC.GetString(3) + "."
+            //                    + readerC.GetString(4);
+            //nodeData.DEATHDATE = readerC.GetString(5) + "."
+            //                    + readerC.GetString(6) + "."
+            //                    + readerC.GetString(7);
+            //nodeData.RACE = readerC.GetString(8);
+            //nodeData.BEMERKUNG = readerC.GetString(9);
+            //nodeData.POSITION_X = readerC.GetFloat(10);
+            //nodeData.POSITION_Y = readerC.GetFloat(11);
 
             //name
             sqlName = "SELECT VALUE FROM NAME WHERE CHARACTER_ID = " + nodeData.CHARACTERID
@@ -144,7 +163,7 @@ public class scr_Map : MonoBehaviour
                 nodeData.TAGS.AddLast(readerN.GetString(0));
             }
             
-            GameObject node = Instantiate(nodePrefab, new Vector2(0, 0), transform.rotation);
+            GameObject node = Instantiate(nodePrefab, new Vector2(0, 0), Quaternion.Euler(0, 0, 0));
             node.GetComponent<Node>().GiveData(nodeData);
             node.GetComponent<Node>().id = nodeCount;
             nodeCount++;
@@ -186,7 +205,7 @@ public class scr_Map : MonoBehaviour
             connectionData.BEMERKUNG = readerC.GetString(3);
             connectionData.BESCHRIFTUNG = readerC.GetString(4);
 
-            GameObject connection = Instantiate(connectionPrefab, new Vector2(0, 0), transform.rotation);
+            GameObject connection = Instantiate(connectionPrefab, new Vector2(0, 0), Quaternion.Euler(0, 0, 0));
             connection.GetComponent<Connection>().GiveData(connectionData);
             connection.GetComponent<Connection>().id = connectionCount;
             connectionCount++;
@@ -202,6 +221,58 @@ public class scr_Map : MonoBehaviour
     public static void Save()
     {
         saved = true;
+        dbconn.Open();
+        IDbCommand dbcmd = dbconn.CreateCommand();
+        IDataReader readerC;
+        string sqlStr = "";
+        int counter;
+
+        Node[] _nodes = new Node[nodeList.Count];
+        nodeList.CopyTo(_nodes, 0);
+        NodeData node;
+        for (int i = 0; i < _nodes.Length; i++)
+        {
+            counter = 0;
+            node = _nodes[i].GetData();
+
+            sqlStr = "SELECT * FROM CHARACTER WHERE CHARACTERID = '" + node.CHARACTERID + "'";
+
+            dbcmd.CommandText = sqlStr;
+            readerC = dbcmd.ExecuteReader();
+
+            while (readerC.Read())
+            {
+                counter++;
+            }
+
+            if (counter > 0) //at least one character with that ID
+            {
+                sqlStr = "";
+            }
+            else
+            {
+                sqlStr = "INSERT INTO CHARACTER ("
+                        + "CHARACTERID, "
+                        + "PROJECT_ID, "
+                        + "RACE, "
+                        + "BEMERKUNG, "
+                        + "POSITION_X, "
+                        + "POSITION_Y, "
+                        + "AGE, "
+                        + "BIRTHDATE, "
+                        + "DEATHDATE) VALUES ( "
+                        + node.CHARACTERID + ", "
+                        + projectID + ", "
+                        + node.RACE + ", "
+                        + node.BEMERKUNG + ", "
+                        + node.POSITION_X + ", "
+                        + node.POSITION_Y + ", "
+                        + node.AGE + ", "
+                        + node.BIRTHDATE + ", "
+                        + node.DEATHDATE
+                        + ")";
+            }
+        }
     }
 
     public static void End()
@@ -230,6 +301,40 @@ public class scr_Map : MonoBehaviour
             writer.WriteLine("");
             writer.WriteLine("#SQL " + sql);
 
+        }
+    }
+
+    public static void AddNode(Node node, bool delete)
+    {
+        if (delete)
+        {
+            deletedNodeList.AddLast(node);
+            nodeList.Remove(node);
+        }
+        else
+        {
+            nodeList.AddLast(node);
+            if (deletedNodeList.Contains(node))
+            {
+                deletedNodeList.Remove(node);
+            }
+        }
+    }
+
+    public static void AddConnection(Connection connection, bool delete)
+    {
+        if (delete)
+        {
+            deletedConnectionList.AddLast(connection);
+            connectionList.Remove(connection);
+        }
+        else
+        {
+            connectionList.AddLast(connection);
+            if (deletedConnectionList.Contains(connection))
+            {
+                deletedConnectionList.Remove(connection);
+            }
         }
     }
 }
