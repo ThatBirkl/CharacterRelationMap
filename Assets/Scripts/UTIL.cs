@@ -36,4 +36,32 @@ public class UTIL : MonoBehaviour
 
         return ret;
     }
+
+    public static void SplitNameStringAndGetFontSize(string name, out string retName, out float fontSize)
+    {
+        retName = name.Replace(" ", "\n");
+        fontSize = 0.03f;
+        if (name.Length <= 6)
+        {
+
+        }
+        else if (name.Length <= 12)
+        {
+            fontSize = 0.025f;
+        }
+        else if (name.Length <= 24)
+        {
+            fontSize = 0.02f;
+        }
+        else if (name.Length <= 24)
+        {
+            fontSize = 0.015f;
+        }
+    }
+
+    public static bool UIElementContains(Vector2 coords, GameObject gameObj)
+    {
+        Vector2 localPos = gameObj.transform.InverseTransformPoint(coords);
+        return ((RectTransform)gameObj.transform).rect.Contains(localPos);
+    }
 }
