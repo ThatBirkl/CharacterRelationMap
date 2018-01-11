@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using System.Linq;
 
 public class UTIL : MonoBehaviour
 {
+    public static string[] CHARACTER_PARAMS = { "NAME", "RACE", "AGE", "BIRTHDATE", "DEATHDATE", "BEMERKUNG" };
+    public static string[] RELATION_PARAMS = { };
+
     public static void NewID(out string id)
     {
         id = "string";
@@ -63,5 +67,76 @@ public class UTIL : MonoBehaviour
     {
         Vector2 localPos = gameObj.transform.InverseTransformPoint(coords);
         return ((RectTransform)gameObj.transform).rect.Contains(localPos);
+    }
+
+    public static void ParseQueryToSQL(string query, out string sql)
+    {
+        //character: tag = "", name = "", birthdate = "" -> [tag, name, birthate], ["", "", ""]
+        sql = "";
+        string sqlSelect = "SELECT * ";
+        string sqlFrom = "FROM ";
+        string sqlWhere = "WHERE ";
+        bool character = false;
+        bool error = false;
+
+        string[] qArr = query.Split(':');
+        qArr[0] = qArr[0].Replace(" ", "");
+        qArr[0] = qArr[0].Replace(":", "");
+        qArr[0] = qArr[0].ToLower();
+
+        if (qArr[0].Equals("character"))
+        {
+            sqlFrom += "CHARACTER ";
+            character = true;
+        }
+        else if (qArr[0].Equals("relation"))
+        {
+            sqlFrom += "RELATION ";
+        }
+        else
+        {
+            error = true;
+            sql = "SQL ERROR: 1"; //replace with something better later
+        }
+
+        if (error)
+            return;
+
+        qArr = qArr[1].Split(','); // => ["tag = """, "name = """, "birthdate = """]
+        string[][] subArr = new string[qArr.Length][];
+        string[] pars = new string[qArr.Length];
+        string[]vals = new string[qArr.Length];
+        for (int i = 0; i < qArr.Length; i++)
+        {
+            qArr[i].Replace(",", "");
+            subArr[i] = qArr[i].Split('=');
+            subArr[i][0] = subArr[i][0].Replace("=", "");
+            subArr[i][0] = subArr[i][0].Replace(" ", "");
+            subArr[i][1] = subArr[i][1].Replace("=", "");
+            subArr[i][1] = subArr[i][1].Replace(" ", ""); // => [[tag, ""], [name, ""], [birthdate, ""]]
+            vals[i] = subArr[i][1];
+            pars[i] = subArr[i][0]; // => [tag, name, birthdate], ["", "", ""]
+
+            if ((!CHARACTER_PARAMS.Contains<string>(pars[i]) && character) || (!RELATION_PARAMS.Contains<string>(pars[i]) && !character))
+            {
+                sql = "SQL ERROR: 2";
+                error = true;
+                return;
+            }
+        }
+
+        if (error)
+            return;
+
+        Array.Sort<string, string>(vals, pars); //both arrays are sorted so that I can check if the user wants two differen values for the same param so I can use a OR instead of AND
+        print(pars);
+
+        ////sqlWhere += subArr[0] + " LIKE '%" + subArr[1] + "%' ";
+
+        ////if (i < qArr.Length - 1)
+        ////{
+        ////    sqlWhere += "AND ";
+        ////}
+        sql = sqlSelect + sqlFrom + sqlWhere;
     }
 }

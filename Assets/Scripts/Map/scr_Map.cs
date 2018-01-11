@@ -235,7 +235,7 @@ public class scr_Map : MonoBehaviour
             counter = 0;
             node = _nodes[i].GetData();
 
-            sqlStr = "SELECT * FROM CHARACTER WHERE CHARACTERID = '" + node.CHARACTERID + "'";
+            sqlStr = "SELECT * FROM CHARACTER WHERE CHARACTERID = '" + node.CHARACTERID + "' AND PROJECT_ID = '" + projectID + "' ";
 
             dbcmd.CommandText = sqlStr;
             readerC = dbcmd.ExecuteReader();
@@ -247,7 +247,15 @@ public class scr_Map : MonoBehaviour
 
             if (counter > 0) //at least one character with that ID
             {
-                sqlStr = "";
+                sqlStr = "UPDATE CHARACTER "
+                        + "RACE = '" + node.RACE + "', "
+                        + "BEMERKUNG = '" + node.BEMERKUNG + "', "
+                        + "POSITION_X = '" + node.POSITION_X + "', "
+                        + "POSITION_Y = '" + node.POSITION_Y + "', "
+                        + "AGE = '" + node.AGE + "', "
+                        + "BIRTHDATE = '" + node.BIRTHDATE + "', "
+                        + "DEATHDATE = '" + node.DEATHDATE + "' "
+                        + "WHERE PROJECT_ID = '" + projectID + "' AND CHARACTERID = '" + node.CHARACTERID + "' ";
             }
             else
             {
